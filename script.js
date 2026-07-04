@@ -109,16 +109,18 @@ document.getElementById('calc-stats-btn').addEventListener('click', () => {
     const statPerTick = parseValue(document.getElementById('stat-per-tick').value);
     const current = parseValue(document.getElementById('current-stats').value);
     const wanted = parseValue(document.getElementById('wanted-stats').value);
-    const champMulti = parseFloat(document.getElementById('champion-tick').value) || 1;
+    const champStatTick = parseValue(document.getElementById('champion-tick').value);
     const isAfk = document.getElementById('afk-clicking').checked;
 
     const ticksPerMin = isAfk ? 120 : 60; 
-    const totalPerMin = statPerTick * champMulti * ticksPerMin;
+    // Player ticks (60 or 120/min) + Champion ticks (15/min since it's every 4s)
+    const totalPerMin = (statPerTick * ticksPerMin) + (champStatTick * 15);
     const needed = Math.max(0, wanted - current);
     const totalSeconds = totalPerMin > 0 ? (needed / totalPerMin) * 60 : 0;
 
     document.getElementById('stats-results').innerHTML = `
         Per Minute: ${formatValue(totalPerMin)}<br>
+        Per Hour: ${formatValue(totalPerMin * 60)}<br>
         Time: ${formatTime(totalSeconds)}
     `;
 });
@@ -126,7 +128,7 @@ document.getElementById('calc-stats-btn').addEventListener('click', () => {
 // Stat Time Calculator
 document.getElementById('calc-stat-time-btn').addEventListener('click', () => {
     const statPerTick = parseValue(document.getElementById('stat-per-tick').value);
-    const champMulti = parseFloat(document.getElementById('champion-tick').value) || 1;
+    const champStatTick = parseValue(document.getElementById('champion-tick').value);
     const amount = parseFloat(document.getElementById('time-amount').value) || 0;
     const period = document.getElementById('time-period').value;
     const isAfk = document.getElementById('afk-clicking').checked;
@@ -136,7 +138,7 @@ document.getElementById('calc-stat-time-btn').addEventListener('click', () => {
     if (period === 'Days') minutes *= 1440;
     
     const ticksPerMin = isAfk ? 120 : 60;
-    const totalStats = statPerTick * champMulti * ticksPerMin * minutes;
+    const totalStats = ((statPerTick * ticksPerMin) + (champStatTick * 15)) * minutes;
     
     document.getElementById('stat-time-results').innerHTML = `Total Stats: ${formatValue(totalStats)}`;
 });
@@ -224,6 +226,7 @@ document.getElementById('calc-yen-btn').addEventListener('click', () => {
     document.getElementById('yen-results').innerHTML = `
         Base Yen / Min: ${formatValue(totalYenPerMin / (gamepass * nenMulti * heroMulti * totalChampMulti))}<br>
         Yen / Min: ${formatValue(totalYenPerMin)}<br>
+        Yen / Hour: ${formatValue(totalYenPerMin * 60)}<br>
         Time: ${formatTime(totalSeconds)}
     `;
 });
