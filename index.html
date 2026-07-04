@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow Monarch System Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>AFSE Calculator (Updated)</h1>
+    <div class="subtitle">AFSE Calculator v.5.543</div>
+
+    <div class="nav-bar">
+        <button class="nav-btn active" data-tab="calculator">Calculator</button>
+        <button class="nav-btn" data-tab="classes">Classes</button>
+        <button class="nav-btn" data-tab="powers">Powers</button>
+        <button class="nav-btn" data-tab="champions">Champions</button>
+        <button class="nav-btn cyan-tab" data-tab="codes">Codes</button>
+        <button class="nav-btn cyan-tab" data-tab="credits">Credits</button>
+        <button class="nav-btn cyan-tab" data-tab="discord">Discord</button>
+    </div>
+
+    <div id="calculator" class="tab-content active">
+        <div class="dashboard-grid">
+
+            <div class="panel">
+                <div class="panel-title">NPC Kills Farming Calculator</div>
+                
+                <div class="form-group">
+                    <label for="current-kills">Current Kills</label>
+                    <input type="text" id="current-kills" placeholder="e.g. 1K">
+                </div>
+
+                <div class="form-group">
+                    <label for="wanted-kills">Wanted Kills</label>
+                    <input type="text" id="wanted-kills" placeholder="e.g. 5K">
+                </div>
+
+                <div class="form-group">
+                    <label for="npc-amount">Amount of NPC's</label>
+                    <input type="text" id="npc-amount" placeholder="e.g. 5">
+                </div>
+
+                <button class="btn" id="calc-kills-btn">Calculate Time</button>
+
+                <div class="results" id="kills-results">
+                    Kills / Min: 0<br>
+                    Kills Remaining: 0<br>
+                    Time: 0d 0h 0m 0s
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">Stats Calculator</div>
+                
+                <div class="form-group">
+                    <label for="select-stat">Select Stat</label>
+                    <select id="select-stat">
+                        <option>Durability</option>
+                        <option>Strength</option>
+                        <option>Chakra</option>
+                        <option>Swordmanship</option>
+                    </select>
+                </div>
+
+                <div class="toggle-container">
+                    <label class="switch">
+                        <input type="checkbox" id="afk-clicking">
+                        <span class="slider"></span>
+                    </label>
+                    <label for="afk-clicking">AFK Clicking</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="stat-per-tick">Stat per Tick</label>
+                    <input type="text" id="stat-per-tick" placeholder="e.g. 1M">
+                </div>
+
+                <div class="form-group">
+                    <label for="current-stats">Current Stats</label>
+                    <input type="text" id="current-stats" placeholder="e.g. 50M">
+                </div>
+
+                <div class="form-group">
+                    <label for="wanted-stats">Wanted Stats</label>
+                    <input type="text" id="wanted-stats" placeholder="e.g. 1B">
+                </div>
+
+                <button class="btn" id="calc-stats-btn">Calculate</button>
+
+                <div class="results" id="stats-results">
+                    Per Minute: 0<br>
+                    Time: 0d 0h 0m
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="panel-title" style="font-size: 0.9rem;">Stat Time Calculator</div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="time-amount">Amount</label>
+                        <input type="text" id="time-amount" placeholder="e.g. 10">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="time-period">Period</label>
+                        <select id="time-period" style="padding: 7px;">
+                            <option value="Mins">Mins</option>
+                            <option value="Hours">Hours</option>
+                            <option value="Days">Days</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" id="calc-stat-time-btn" style="padding: 8px;">Calculate</button>
+                <div class="results" id="stat-time-results" style="font-size: 0.8rem;">Total Stats: 0</div>
+            </div>
+
+            <div class="panel cyan-border">
+                <div class="panel-title" style="font-size: 0.95rem;">Server Boost</div>
+                <p style="font-size: 0.7rem; color: var(--text-muted); text-align: center; margin: 0;">
+                    Shows what your loss per stat would be without an active server boost.
+                </p>
+                <div class="form-group">
+                    <label for="boost-stat-tick">Stat per Tick with server Boost</label>
+                    <input type="text" id="boost-stat-tick" placeholder="e.g. 1.5M">
+                </div>
+                <div class="results" id="boost-results" style="font-weight: bold;">Adjusted: 0</div>
+
+                <div style="border: 1px dashed var(--border-cyan); padding: 15px; border-radius: 8px; margin-top: 10px; display: flex; flex-direction: column; gap: 12px;">
+                    <div class="panel-title" style="font-size: 0.95rem;">Incremental Calculator</div>
+                    
+                    <div class="form-group">
+                        <label for="inc-select-stat">Select Stat</label>
+                        <select id="inc-select-stat">
+                            <option>Strength</option>
+                            <option>Durability</option>
+                            <option>Chakra</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Current: 1</label>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Target: 12k</label>
+                        </div>
+                    </div>
+
+                    <div class="inline-toggles">
+                        <div class="toggle-container">
+                            <label class="switch">
+                                <input type="checkbox" id="inc-afk">
+                                <span class="slider"></span>
+                            </label>
+                            <label for="inc-afk">AFK</label>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="switch">
+                                <input type="checkbox" id="inc-clicking">
+                                <span class="slider"></span>
+                            </label>
+                            <label for="inc-clicking">Clicking</label>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="switch">
+                                <input type="checkbox" id="inc-champion">
+                                <span class="slider"></span>
+                            </label>
+                            <label for="inc-champion">Champion</label>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="switch">
+                                <input type="checkbox" id="inc-vip">
+                                <span class="slider"></span>
+                            </label>
+                            <label for="inc-vip">VIP Pass</label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-cyan" id="calc-increments-btn">Calc Increments</button>
+                    <div class="results" id="inc-results">
+                        Inc / Min: 0.00<br>
+                        Time: 0d 0h 0m
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">Yen Calculator</div>
+
+                <div class="form-group">
+                    <label for="class-select">Select Class</label>
+                    <select id="class-select">
+                        <option value="1">Default (1/min)</option>
+                        <option value="10">Shinobi (10/min)</option>
+                        <option value="25">Pirate (25/min)</option>
+                        <option value="50">Ghoul (50/min)</option>
+                        <option value="100">Hero (100/min)</option>
+                        <option value="500">Reaper (500/min)</option>
+                        <option value="1000">Saiyan (1k/min)</option>
+                        <option value="2500">Sin (2.5k/min)</option>
+                        <option value="10000">Magi (10k/min)</option>
+                        <option value="45000">Akuma (45k/min)</option>
+                        <option value="100000">Yonko (100k/min)</option>
+                        <option value="250000">Gorosei (250k/min)</option>
+                        <option value="750000">Overlord (750k/min)</option>
+                        <option value="4500000">Hokage (4.5M/min)</option>
+                        <option value="25000000">Kaioshin (25M/min)</option>
+                        <option value="150000000">Sage (150M/min)</option>
+                        <option value="500000000">Espada (500M/min)</option>
+                        <option value="2500000000">Shinigami (2.5B/min)</option>
+                        <option value="7500000000">Hashira (7.5B/min)</option>
+                        <option value="45000000000">Hakaishin (45B/min)</option>
+                        <option value="135000000000">Otsutsuki (135B/min)</option>
+                        <option value="810000000000">Pirate King (810B/min)</option>
+                        <option value="2430000000000">Kishin (2.43T/min)</option>
+                        <option value="7290000000000">Angel (7.29T/min)</option>
+                        <option value="21870000000000">Demon King (21.87T/min)</option>
+                        <option value="65610000000000">Ultra Instinct (65.61T/min)</option>
+                    <option value="196800000000000">Upper Moon (196.8T/min)</option>
+                </select>
+            </div>
+
+
+                <div class="toggle-container">
+                    <label class="switch">
+                        <input type="checkbox" id="yen-gamepass">
+                        <span class="slider"></span>
+                    </label>
+                    <label for="yen-gamepass">x2 Yen Gamepass</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="yen-multi">Nen Multi</label>
+                    <select id="yen-multi">
+                        <option value="1">None (1x)</option>
+                        <option value="2">2x</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="hero-multi">Hero Multi</label>
+                    <select id="hero-multi">
+                        <option value="1">None (1x)</option>
+                        <option value="1.5">1.5x</option>
+                    </select>
+                </div>
+
+                <div class="divider"></div>
+                <div class="panel-title" style="font-size: 0.9rem;">Champion Multipliers</div>
+                
+                <div class="multipliers-grid">
+                    <div class="form-group">
+                        <label for="bolma-count">Bolma</label>
+                        <input type="number" id="bolma-count" value="0" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="speedcart-count">Speedcart</label>
+                        <input type="number" id="speedcart-count" value="0" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="demon-lord-count">D-Lord</label>
+                        <input type="number" id="demon-lord-count" value="0" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="awakened-demon-lord-count">Awk D-Lord</label>
+                        <input type="number" id="awakened-demon-lord-count" value="0" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loofi-ts-count">Loofi TS</label>
+                        <input type="number" id="loofi-ts-count" value="0" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shadow-count">Shadow</label>
+                        <input type="number" id="shadow-count" value="0" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kami-count">Kami</label>
+                        <input type="number" id="kami-count" value="0" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="barto-count">Barto</label>
+                        <input type="number" id="barto-count" value="0" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hawk-eye-count">Hawk Eye</label>
+                        <input type="number" id="hawk-eye-count" value="0" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="awakened-hunter-count">Awk Hunt</label>
+                        <input type="number" id="awakened-hunter-count" value="0" min="0">
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+                
+                <div class="form-group">
+                    <label for="current-yen">Current Yen</label>
+                    <input type="text" id="current-yen" placeholder="e.g. 500K">
+                </div>
+
+                <div class="form-group">
+                    <label for="needed-yen">Needed Yen</label>
+                    <input type="text" id="needed-yen" placeholder="e.g. 10M">
+                </div>
+
+                <button class="btn" id="calc-yen-btn">Calculate</button>
+
+                <div class="results" id="yen-results">
+                    Base Yen / Min: 0<br>
+                    Yen / Min: 0<br>
+                    Time: 0d 0h 0m 0s
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="panel-title" style="font-size: 0.9rem;">Yen Time Calculator</div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="yen-time-amount">Time Amount</label>
+                        <input type="text" id="yen-time-amount" placeholder="e.g. 10">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="yen-time-unit">Time Unit</label>
+                        <select id="yen-time-unit" style="padding: 7px;">
+                            <option value="Minutes">Mins</option>
+                            <option value="Hours">Hours</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-cyan" id="calc-yen-time-btn" style="background-color: #0284c7; padding: 8px;">Calculate</button>
+                <div class="results" id="yen-time-results" style="font-size: 0.8rem;">Total Yield: 0 Yen</div>
+
+                <div class="divider"></div>
+
+                <div class="panel-title">Code Scale Converter</div>
+                <p style="font-size: 0.7rem; color: var(--text-muted); text-align: center; margin: 0;">
+                    Calculate the scaled reward of a yen code based on your current class.
+                </p>
+                
+                <div class="form-group">
+                    <label for="scale-class-select">Select Class</label>
+                    <select id="scale-class-select">
+                        <option value="Fighter">Fighter</option>
+                        <option value="Shinobi">Shinobi</option>
+                        <option value="Pirate">Pirate</option>
+                        <option value="Ghoul">Ghoul</option>
+                        <option value="Hero">Hero</option>
+                        <option value="Reaper">Reaper</option>
+                        <option value="Saiyan">Saiyan</option>
+                        <option value="Sin">Sin</option>
+                        <option value="Magi">Magi</option>
+                        <option value="Akuma">Akuma</option>
+                        <option value="Yonko">Yonko</option>
+                        <option value="Gorosei">Gorosei</option>
+                        <option value="Overlord">Overlord</option>
+                        <option value="Hokage">Hokage</option>
+                        <option value="Kaioshin">Kaioshin</option>
+                        <option value="Sage">Sage</option>
+                        <option value="Espada">Espada</option>
+                        <option value="Shinigami">Shinigami</option>
+                        <option value="Hashira">Hashira</option>
+                        <option value="Hakaishin">Hakaishin</option>
+                        <option value="Otsutsuki">Otsutsuki</option>
+                        <option value="Pirate King">Pirate King</option>
+                        <option value="Kishin">Kishin</option>
+                        <option value="Angel">Angel</option>
+                        <option value="Demon King">Demon King</option>
+                        <option value="Ultra Instinct">Ultra Instinct</option>
+                        <option value="Upper Moon">Upper Moon</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="code-base-select">Code Value</label>
+                    <select id="code-base-select">
+                        <option value="500000">500k Code</option>
+                        <option value="1000000">1M Code</option>
+                        <option value="1500000">1.5M Code</option>
+                    </select>
+                </div>
+
+                <button class="btn" id="calc-scale-btn">Convert Scale</button>
+
+                <div class="results" id="scale-results">
+                    Scaled Reward: 0 Yen
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="classes" class="tab-content">
+        <div class="panel" style="max-width: 1200px; width: 100%;">
+            <div class="panel-title">Classes System</div>
+            <div class="classes-grid">
+                <div class="class-item">
+                    <div class="class-header"><span>SHINOBI CLASS</span> <span class="class-number">#1</span></div>
+                    <div class="class-reward">Increases Yen/min to 10</div>
+                    <div class="class-reqs">Requirement: 100 yen | 1k all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>PIRATE CLASS</span> <span class="class-number">#2</span></div>
+                    <div class="class-reward">Increases Yen/min to 25</div>
+                    <div class="class-reqs">Requirement: 500 yen | 10k all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>GHOUL CLASS</span> <span class="class-number">#3</span></div>
+                    <div class="class-reward">Increases Yen/min to 50</div>
+                    <div class="class-reqs">Requirement: 1.500K yen | 100k all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>HERO CLASS</span> <span class="class-number">#4</span></div>
+                    <div class="class-reward">Increases Yen/min to 100</div>
+                    <div class="class-reqs">Requirement: 5k yen | 1M all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>REAPER CLASS</span> <span class="class-number">#5</span></div>
+                    <div class="class-reward">Increases Yen/min to 500</div>
+                    <div class="class-reqs">Requirement: 25k yen | 10M all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>SAIYAN CLASS</span> <span class="class-number">#6</span></div>
+                    <div class="class-reward">Increases Yen/min to 1k</div>
+                    <div class="class-reqs">Requirements: 100k yen | 1B all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>SIN CLASS</span> <span class="class-number">#7</span></div>
+                    <div class="class-reward">Increases Yen/min to 2.500k</div>
+                    <div class="class-reqs">Requirements: 250k yen | 100B all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>MAGI CLASS</span> <span class="class-number">#8</span></div>
+                    <div class="class-reward">Increases Yen/min to 10k</div>
+                    <div class="class-reqs">Requirements: 1M yen | 1T all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>AKUMA CLASS</span> <span class="class-number">#9</span></div>
+                    <div class="class-reward">Increases Yen/min to 45k</div>
+                    <div class="class-reqs">Requirements: 5M yen | 100T all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>YONKO CLASS</span> <span class="class-number">#10</span></div>
+                    <div class="class-reward">Increases Yen/min to 100k</div>
+                    <div class="class-reqs">Requirements: 24.75M yen | 1qd all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>GOROSEI CLASS</span> <span class="class-number">#11</span></div>
+                    <div class="class-reward">Increases Yen/min to 250k</div>
+                    <div class="class-reqs">Requirements: 62M yen | 100qd all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>OVERLORD CLASS</span> <span class="class-number">#12</span></div>
+                    <div class="class-reward">Increases Yen/min to 750k</div>
+                    <div class="class-reqs">Requirements: 165M yen | 1Qn all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>HOKAGE CLASS</span> <span class="class-number">#13</span></div>
+                    <div class="class-reward">Increases Yen/min to 4.500M</div>
+                    <div class="class-reqs">Requirements: 540M yen | 100Qn all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>KAIOSHIN CLASS</span> <span class="class-number">#14</span></div>
+                    <div class="class-reward">Increases Yen/min to 25M</div>
+                    <div class="class-reqs">Requirements: 3.487B yen | 1sx all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>SAGE CLASS</span> <span class="class-number">#15</span></div>
+                    <div class="class-reward">Increases Yen/min to 150M</div>
+                    <div class="class-reqs">Requirements: 12B yen | 100sx all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>ESPADA CLASS</span> <span class="class-number">#16</span></div>
+                    <div class="class-reward">Increases Yen/min to 500M</div>
+                    <div class="class-reqs">Requirements: 82.50B yen | 1Sp all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>SHINIGAMI CLASS</span> <span class="class-number">#17</span></div>
+                    <div class="class-reward">Increases Yen/min to 2.500B</div>
+                    <div class="class-reqs">Requirements: 1T yen | 100Sp all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>HASHIRA CLASS</span> <span class="class-number">#18</span></div>
+                    <div class="class-reward">Increases Yen/min to 7.500B</div>
+                    <div class="class-reqs">Requirements: 6T yen | 1oc all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>HAKAISHIN CLASS</span> <span class="class-number">#19</span></div>
+                    <div class="class-reward">Increases Yen/min to 45B</div>
+                    <div class="class-reqs">Requirements: 21T yen | 100oc all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>OTSUTSUKI CLASS</span> <span class="class-number">#20</span></div>
+                    <div class="class-reward">Increases Yen/min to 135B</div>
+                    <div class="class-reqs">Requirements: 144T yen | 1N all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>PIRATE KING CLASS</span> <span class="class-number">#21</span></div>
+                    <div class="class-reward">Increases Yen/min to 810B</div>
+                    <div class="class-reqs">Requirements: 540T yen | 100N all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>KISHIN CLASS</span> <span class="class-number">#22</span></div>
+                    <div class="class-reward">Increases Yen/min to 2.430T</div>
+                    <div class="class-reqs">Requirements: 3.564qd yen | 1000N(1de) all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>ANGEL CLASS</span> <span class="class-number">#23</span></div>
+                    <div class="class-reward">Increases Yen/min to 7.290T</div>
+                    <div class="class-reqs">Requirements: 9.801qd yen | 100de all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>DEMON KING CLASS</span> <span class="class-number">#24</span></div>
+                    <div class="class-reward">Increases Yen/min to 21.87T</div>
+                    <div class="class-reqs">Requirements: 21.56qd yen | 1Ud all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>ULTRA INSTINCT CLASS</span> <span class="class-number">#25</span></div>
+                    <div class="class-reward">Increases Yen/min to 65.61T</div>
+                    <div class="class-reqs">Requirements: 109.8qd yen | 100Ud all main stats</div>
+                </div>
+                <div class="class-item">
+                    <div class="class-header"><span>UPPER MOON CLASS</span> <span class="class-number">#26</span></div>
+                    <div class="class-reward">Increases Yen/min to 196.8T</div>
+                    <div class="class-reqs">Requirements: 351.3qd yen | 1000Ud(1DD) all main stats</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="codes" class="tab-content">
+        <div class="panel" style="max-width: 800px; width: 100%;">
+            <div class="panel-title" style="justify-content: center; font-size: 1.2rem;">Active Game Codes</div>
+            <div style="display: grid; gap: 12px; margin-top: 15px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--accent); font-size: 1.1rem;">Dimension3</div>
+                        <div style="font-size: 0.8rem; color: var(--text-dim);">Reward: 1.5M Yen (Scales)</div>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--accent); font-size: 1.1rem;">Dim3Delayed</div>
+                        <div style="font-size: 0.8rem; color: var(--text-dim);">Reward: 1M Yen (Scales)</div>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--accent); font-size: 1.1rem;">Kaido</div>
+                        <div style="font-size: 0.8rem; color: var(--text-dim);">Reward: 500K Yen (Scales)</div>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--accent); font-size: 1.1rem;">NewLuffy</div>
+                        <div style="font-size: 0.8rem; color: var(--text-dim);">Reward: 300K Chikara</div>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--accent); font-size: 1.1rem;">Shadow!</div>
+                        <div style="font-size: 0.8rem; color: var(--text-dim);">Reward: 500K Chikara</div>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--accent); font-size: 1.1rem;">Enel</div>
+                        <div style="font-size: 0.8rem; color: var(--text-dim);">Reward: 250 Trait RR</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="credits" class="tab-content">
+        <div class="panel" style="max-width: 1000px; width: 100%;">
+            <div class="panel-title" style="justify-content: center; font-size: 1.5rem; color: #a855f7;">Development Credits</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+                    <div style="color: var(--accent); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Developer</div>
+                    <div style="font-weight: 700; font-size: 1.1rem;">ArkoNyx</div>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+                    <div style="color: var(--accent); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Ticks Per Stat</div>
+                    <div style="font-weight: 700; font-size: 1.1rem;">Xlegendary_boyX</div>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+                    <div style="color: var(--accent); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Codes and Rewards</div>
+                    <div style="font-weight: 700; font-size: 1.1rem;">Welshwhizard and Lord Crwys</div>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+                    <div style="color: var(--accent); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Champion Yen Adder and Yen Code Scale Converter</div>
+                    <div style="font-weight: 700; font-size: 1.1rem;">JitteruKun (v.5.543)</div>
+                </div>
+                <div style="grid-column: span 2; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+                    <div style="color: var(--accent); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Version</div>
+                    <div style="font-weight: 700; font-size: 1.1rem;">v5.543</div>
+                </div>
+            </div>
+            <div style="text-align: center; color: var(--text-dim); font-size: 0.8rem; margin-top: 20px;">
+                All stuff was made by ArkoNyx.
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
