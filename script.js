@@ -105,16 +105,30 @@ document.getElementById('calc-kills-btn').addEventListener('click', () => {
 });
 
 // --- 2. Stats Calculator logic ---
+const tickRates = {
+    "Strength": { "AFK": 42, "Clicking": 52 },
+    "Durability": { "AFK": 32, "Clicking": 32 },
+    "Chakra": { "AFK": 22, "Clicking": 25 },
+    "Swordmanship": { "AFK": 42, "Clicking": 48 }
+};
+
 document.getElementById('calc-stats-btn').addEventListener('click', () => {
+    const statType = document.getElementById('select-stat').value;
     const statPerTick = parseValue(document.getElementById('stat-per-tick').value);
     const current = parseValue(document.getElementById('current-stats').value);
     const wanted = parseValue(document.getElementById('wanted-stats').value);
     const champStatTick = parseValue(document.getElementById('champion-tick').value);
     const isAfk = document.getElementById('afk-clicking').checked;
+    const isAyakoji = document.getElementById('ayakoji-inv').checked;
 
-    const ticksPerMin = isAfk ? 120 : 60; 
-    // Player ticks (60 or 120/min) + Champion ticks (15/min since it's every 4s)
-    const totalPerMin = (statPerTick * ticksPerMin) + (champStatTick * 15);
+    let baseTicks = isAfk ? tickRates[statType].Clicking : tickRates[statType].AFK;
+    if (isAyakoji) {
+        baseTicks = Math.round(baseTicks * 1.15);
+    }
+    
+    const ticksPerMin = baseTicks; 
+    // Player ticks + Champion ticks (20/min as specified)
+    const totalPerMin = (statPerTick * ticksPerMin) + (champStatTick * 20);
     const needed = Math.max(0, wanted - current);
     const totalSeconds = totalPerMin > 0 ? (needed / totalPerMin) * 60 : 0;
 
@@ -123,22 +137,42 @@ document.getElementById('calc-stats-btn').addEventListener('click', () => {
         Per Hour: ${formatValue(totalPerMin * 60)}<br>
         Time: ${formatTime(totalSeconds)}
     `;
+
+    // AC Settings recommendation
+    const acDetail = document.getElementById('ac-detail');
+    const acBox = document.getElementById('ac-settings');
+    acBox.style.display = 'block';
+    
+    const settings = {
+        "Swordmanship": isAyakoji ? "0-1ms or 90ms | Auto Train Off" : "0-1ms or 155ms | Auto Train Off",
+        "Strength": isAyakoji ? "0-1ms or 100ms | Auto Train Off" : "0-1ms or 125ms | Auto Train Off",
+        "Chakra": isAyakoji ? "930-960ms | Auto Train On" : "1100-1200ms | Auto Train On",
+        "Durability": "N/A (Passive)"
+    };
+    acDetail.innerText = settings[statType];
 });
 
 // Stat Time Calculator
 document.getElementById('calc-stat-time-btn').addEventListener('click', () => {
+    const statType = document.getElementById('select-stat').value;
     const statPerTick = parseValue(document.getElementById('stat-per-tick').value);
     const champStatTick = parseValue(document.getElementById('champion-tick').value);
     const amount = parseFloat(document.getElementById('time-amount').value) || 0;
     const period = document.getElementById('time-period').value;
     const isAfk = document.getElementById('afk-clicking').checked;
+    const isAyakoji = document.getElementById('ayakoji-inv').checked;
     
+    let baseTicks = isAfk ? tickRates[statType].Clicking : tickRates[statType].AFK;
+    if (isAyakoji) {
+        baseTicks = Math.round(baseTicks * 1.15);
+    }
+
     let minutes = amount;
     if (period === 'Hours') minutes *= 60;
     if (period === 'Days') minutes *= 1440;
     
-    const ticksPerMin = isAfk ? 120 : 60;
-    const totalStats = ((statPerTick * ticksPerMin) + (champStatTick * 15)) * minutes;
+    const ticksPerMin = baseTicks;
+    const totalStats = ((statPerTick * ticksPerMin) + (champStatTick * 20)) * minutes;
     
     document.getElementById('stat-time-results').innerHTML = `Total Stats: ${formatValue(totalStats)}`;
 });

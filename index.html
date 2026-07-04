@@ -75,6 +75,14 @@
                     <label for="afk-clicking">AFK Clicking</label>
                 </div>
 
+                <div class="toggle-container">
+                    <label class="switch">
+                        <input type="checkbox" id="ayakoji-inv">
+                        <span class="slider"></span>
+                    </label>
+                    <label for="ayakoji-inv">Ayakoji in Inv (15% Faster)</label>
+                </div>
+
                 <div class="form-group">
                     <label for="stat-per-tick">Stat per Tick</label>
                     <input type="text" id="stat-per-tick" placeholder="e.g. 1M">
@@ -101,6 +109,11 @@
                     Per Minute: 0<br>
                     Per Hour: 0<br>
                     Time: 0d 0h 0m
+                </div>
+
+                <div id="ac-settings" style="margin-top: 15px; font-size: 0.8rem; color: var(--text-dim); background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent); display: none;">
+                    <strong>Recommended AC Settings:</strong><br>
+                    <span id="ac-detail"></span>
                 </div>
 
                 <div class="divider"></div>
