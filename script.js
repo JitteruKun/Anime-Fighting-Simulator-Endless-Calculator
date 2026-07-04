@@ -6,7 +6,7 @@ function parseValue(val) {
         'K': 1e3, 'M': 1e6, 'B': 1e9, 'T': 1e12, 
         'QD': 1e15, 'QN': 1e18, 'SX': 1e21, 'SP': 1e24, 
         'OC': 1e27, 'N': 1e30, 'DE': 1e33, 'UD': 1e36, 'DD': 1e39,
-        'TDD': 1e42 
+        'TDD': 1e42, 'QDD': 1e45
     };
     
     // Check for 3-character suffixes (like TDD)
@@ -45,7 +45,7 @@ function formatValue(num) {
     if (num === 0) return "0";
     if (num < 1000) return num.toFixed(2).replace(/\.00$/, '');
     const suffixes = [
-        { s: 'TDD', v: 1e42 }, { s: 'DD', v: 1e39 }, { s: 'UD', v: 1e36 }, { s: 'DE', v: 1e33 },
+        { s: 'QDD', v: 1e45 }, { s: 'TDD', v: 1e42 }, { s: 'DD', v: 1e39 }, { s: 'UD', v: 1e36 }, { s: 'DE', v: 1e33 },
         { s: 'N', v: 1e30 }, { s: 'OC', v: 1e27 }, { s: 'SP', v: 1e24 },
         { s: 'SX', v: 1e21 }, { s: 'QN', v: 1e18 }, { s: 'QD', v: 1e15 },
         { s: 'T', v: 1e12 }, { s: 'B', v: 1e9 }, { s: 'M', v: 1e6 }, { s: 'K', v: 1e3 }
