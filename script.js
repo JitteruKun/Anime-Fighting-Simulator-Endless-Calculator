@@ -111,7 +111,6 @@ document.getElementById('calc-stats-btn').addEventListener('click', () => {
     const wanted = parseValue(document.getElementById('wanted-stats').value);
     const isAfk = document.getElementById('afk-clicking').checked;
 
-    // Simulate tick speed: 1 tick per second normally, faster if afk toggle is active
     const ticksPerMin = isAfk ? 120 : 60; 
     const totalPerMin = statPerTick * ticksPerMin;
     const needed = Math.max(0, wanted - current);
@@ -123,13 +122,60 @@ document.getElementById('calc-stats-btn').addEventListener('click', () => {
     `;
 });
 
+// Stat Time Calculator
+document.getElementById('calc-stat-time-btn').addEventListener('click', () => {
+    const statPerTick = parseValue(document.getElementById('stat-per-tick').value);
+    const amount = parseFloat(document.getElementById('time-amount').value) || 0;
+    const period = document.getElementById('time-period').value;
+    const isAfk = document.getElementById('afk-clicking').checked;
+    
+    let minutes = amount;
+    if (period === 'Hours') minutes *= 60;
+    if (period === 'Days') minutes *= 1440;
+    
+    const ticksPerMin = isAfk ? 120 : 60;
+    const totalStats = statPerTick * ticksPerMin * minutes;
+    
+    document.getElementById('stat-time-results').innerHTML = `Total Stats: ${formatValue(totalStats)}`;
+});
+
+// Server Boost Adjusted
+document.getElementById('boost-stat-tick').addEventListener('input', (e) => {
+    const val = parseValue(e.target.value);
+    document.getElementById('boost-results').innerHTML = `Adjusted: ${formatValue(val / 2)}`;
+});
+
+// Incremental Calculator
+document.getElementById('calc-increments-btn').addEventListener('click', () => {
+    const current = parseValue(document.getElementById('inc-current').value);
+    const target = parseValue(document.getElementById('inc-target').value);
+    
+    const isAfk = document.getElementById('inc-afk').checked;
+    const isClicking = document.getElementById('inc-clicking').checked;
+    const isChamp = document.getElementById('inc-champion').checked;
+    const isVip = document.getElementById('inc-vip').checked;
+    
+    let incPerMin = 1;
+    if (isAfk) incPerMin += 1;
+    if (isClicking) incPerMin += 1;
+    if (isVip) incPerMin *= 2;
+    if (isChamp) incPerMin *= 1.1;
+    
+    const remaining = Math.max(0, target - current);
+    const totalSeconds = incPerMin > 0 ? (remaining / incPerMin) * 60 : 0;
+    
+    document.getElementById('inc-results').innerHTML = `
+        Inc / Min: ${incPerMin.toFixed(2)}<br>
+        Time: ${formatTime(totalSeconds)}
+    `;
+});
+
 // --- 3. Yen Calculator logic ---
-document.getElementById('calc-yen-btn').addEventListener('click', () => {
+function calculateTotalYenPerMin() {
     const gamepass = document.getElementById('yen-gamepass').checked ? 2 : 1;
     const nenMulti = parseFloat(document.getElementById('yen-multi').value) || 1;
     const heroMulti = parseFloat(document.getElementById('hero-multi').value) || 1;
     
-    // Champion Multipliers logic: Multiplier = (1 + (count * (bonus - 1)))
     const bolmaMulti = 1 + (parseInt(document.getElementById('bolma-count').value) || 0) * 0.1;
     const speedcartMulti = 1 + (parseInt(document.getElementById('speedcart-count').value) || 0) * 0.1;
     const demonLordMulti = 1 + (parseInt(document.getElementById('demon-lord-count').value) || 0) * 0.1;
@@ -144,21 +190,53 @@ document.getElementById('calc-yen-btn').addEventListener('click', () => {
     const totalChampMulti = bolmaMulti * speedcartMulti * demonLordMulti * awakenedDemonLordMulti * 
                            loofiTsMulti * shadowMulti * kamiMulti * bartoMulti * 
                            hawkEyeMulti * awakenedHunterMulti;
-    
+
+    const baseYenPerMin = parseFloat(document.getElementById('class-select').value) || 1;
+    return baseYenPerMin * gamepass * nenMulti * heroMulti * totalChampMulti;
+}
+
+document.getElementById('calc-yen-btn').addEventListener('click', () => {
+    const totalYenPerMin = calculateTotalYenPerMin();
     const current = parseValue(document.getElementById('current-yen').value);
     const needed = parseValue(document.getElementById('needed-yen').value);
 
-    const baseYenPerMin = parseFloat(document.getElementById('class-select').value) || 1;
-    const totalYenPerMin = baseYenPerMin * gamepass * nenMulti * heroMulti * totalChampMulti;
-    
     const remainingYen = Math.max(0, needed - current);
     const totalSeconds = totalYenPerMin > 0 ? (remainingYen / totalYenPerMin) * 60 : 0;
+
+    // To show base yen correctly in results
+    const gamepass = document.getElementById('yen-gamepass').checked ? 2 : 1;
+    const nenMulti = parseFloat(document.getElementById('yen-multi').value) || 1;
+    const heroMulti = parseFloat(document.getElementById('hero-multi').value) || 1;
+    const bolmaMulti = 1 + (parseInt(document.getElementById('bolma-count').value) || 0) * 0.1;
+    const speedcartMulti = 1 + (parseInt(document.getElementById('speedcart-count').value) || 0) * 0.1;
+    const demonLordMulti = 1 + (parseInt(document.getElementById('demon-lord-count').value) || 0) * 0.1;
+    const awakenedDemonLordMulti = 1 + (parseInt(document.getElementById('awakened-demon-lord-count').value) || 0) * 0.25;
+    const loofiTsMulti = 1 + (parseInt(document.getElementById('loofi-ts-count').value) || 0) * 0.25;
+    const shadowMulti = 1 + (parseInt(document.getElementById('shadow-count').value) || 0) * 0.25;
+    const kamiMulti = 1 + (parseInt(document.getElementById('kami-count').value) || 0) * 0.25;
+    const bartoMulti = 1 + (parseInt(document.getElementById('barto-count').value) || 0) * 0.25;
+    const hawkEyeMulti = 1 + (parseInt(document.getElementById('hawk-eye-count').value) || 0) * 0.25;
+    const awakenedHunterMulti = 1 + (parseInt(document.getElementById('awakened-hunter-count').value) || 0) * 0.25;
+    const totalChampMulti = bolmaMulti * speedcartMulti * demonLordMulti * awakenedDemonLordMulti * loofiTsMulti * shadowMulti * kamiMulti * bartoMulti * hawkEyeMulti * awakenedHunterMulti;
 
     document.getElementById('yen-results').innerHTML = `
         Base Yen / Min: ${formatValue(totalYenPerMin / (gamepass * nenMulti * heroMulti * totalChampMulti))}<br>
         Yen / Min: ${formatValue(totalYenPerMin)}<br>
         Time: ${formatTime(totalSeconds)}
     `;
+});
+
+// Yen Time Calculator logic
+document.getElementById('calc-yen-time-btn').addEventListener('click', () => {
+    const totalYenPerMin = calculateTotalYenPerMin();
+    const amount = parseFloat(document.getElementById('yen-time-amount').value) || 0;
+    const unit = document.getElementById('yen-time-unit').value;
+    
+    let minutes = amount;
+    if (unit === 'Hours') minutes *= 60;
+    
+    const totalYield = totalYenPerMin * minutes;
+    document.getElementById('yen-time-results').innerHTML = `Total Yield: ${formatValue(totalYield)} Yen`;
 });
 
 // --- 4. Code Scale Converter logic ---
